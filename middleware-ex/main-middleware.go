@@ -1,12 +1,9 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
-
-// ex : https://gin-gonic.com/zh-tw/docs/examples/using-middleware/
 
 // album represents data about a record album.
 type album struct {
@@ -49,6 +46,9 @@ func getAlbumByID(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 }
+
+// ex : https://gin-gonic.com/zh-tw/docs/examples/using-middleware/
+
 func main() {
 	router := gin.New()
 	router.Use(gin.Logger()) // 전역 미들웨어 추가
@@ -56,7 +56,7 @@ func main() {
 	//router := gin.Default() // Default()는 사실 gin.New()에 기본이 되는 미들웨어 추가함
 
 	v1API := router.Group("/v1")
-	v1API.GET("/albums", gin.Logger(), getAlbums) // 특정 메서드 미들웨어 추가 가능
+	v1API.GET("/albums", CustomLoggerMiddleware(), getAlbums) // 특정 메서드 미들웨어 추가 가능
 	v1API.GET("/albums/:id", getAlbumByID)
 	v1API.POST("/albums", postAlbums)
 
